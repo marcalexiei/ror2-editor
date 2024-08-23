@@ -1,0 +1,25 @@
+name: CI
+
+concurrency:
+  group: "${{ github.workflow }} - ${{ github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        script: [format, lint, spellcheck]
+
+    steps:
+      - run: echo 'Check {{ matrix.script }}'
